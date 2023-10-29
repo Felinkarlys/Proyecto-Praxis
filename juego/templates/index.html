@@ -1,0 +1,191 @@
+{% load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ba'ate'el Praxis</title>
+    
+    <!--bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!--css data-->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <!--cc y js de estilos ROEK-->
+    <link rel='stylesheet' href="{% static 'css/index.css' %}"/>
+    
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+</head>
+
+
+<body>
+    <div id="container mt-4">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                <header>
+                    <div class="collapse bg-dark" id="navbarHeader">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-8 col-md-7 py-4">
+                                <h4 class="text-white">Acerca de...</h4>
+                                <p class="text-muted">Bienvenid@ estas entrando en el mundo de Ba'ate'el Praxis, el cual se creo como parte del Praxthon 2023 versión amateur,
+                                    Se programo en lenguaje Python en Django, con HTML5 apoyado de boostrap, js y css,  . El objetivo es mostrar un aplicativo web para poder ver las actividades de gramificación de manera visual</p>
+
+                                </div>
+                                <div class="col-sm-4 offset-md-1 py-4">
+                                <h4 style="text-align: end !important;"  class="text-white">Contacto</h4>
+                                <ul style="text-align: end !important;" class="list-unstyled">
+                                    <li><a style="color: rgb(141, 48, 228) !important" href="#" class="text-white">by Karlys</a></li>
+                                    <li><img src="juego\static\img\logo.jpg" alt="" /></li>
+                                </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="navbar navbar-dark bg-dark shadow-sm">
+                    <div class="container">
+                        <a href="#" class="navbar-brand d-flex align-items-center">
+                                <link rel="icon" href="{% static 'img/logo.jpg' %}">
+                                <strong><h1> <a href="{% url 'index' %}">Ba'ate'el Praxis</a></h1> </strong>
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                </div>
+                    
+                </header>
+
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="#">Puntuación  Ba'ate'el</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                      <ul class="navbar-nav" >
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'busqueda_holken' %}">Cambios holken <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="{% url 'evaluador' %}">Evaluador</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin' %}">Administrador</a>
+                          </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'mini_juegos' %}">Mini juegos</a>
+                          </li>
+                                       
+                    </ul>
+                    </div>
+                  </nav>
+                <div class="table-responsive" >
+                    <table id="dataTable-holken" class="table">
+                        <caption>
+                            Score Ba'ate'el Praxis
+                        </caption>
+                        <thead>
+                            <hr>
+                            <tr>
+                                <th class="centere">Num: </th>
+                                <th class="centere">ID: </th>
+                                <th class="centere">Nombre: </th>
+                                <th class="centere">Equipo: </th>
+                                <th class="centere">Rol: </th>
+                                <th class="centere">Puntos: </th>
+                                <th class="centere">Avatar: </th>
+
+                            </tr>
+
+                        </thead>
+                        <tbody id="tablaBody_holken"></tbody>
+                    </table>                        
+                </div>
+                <div>
+                   <hr>
+                    <h1>Mundo Ba'ate'el Praxis</h1 class="centere">
+                    <br>
+                    <div>
+                        <p>Tablero <span class="block">words</span> <span></span>.</p>
+                        <container> 
+
+                        </container>
+
+                    </div> 
+                    <div id="tablero" class="centere"></div>
+                    <img src="" alt="">
+                    <canvas id="graficoPuntos"></canvas>
+                    
+                    <img src="data:image/png;base64,{{ graphic }}" alt="Gráfico de Datos">
+                </div>
+                
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var tableData = [];
+        var rows = document.querySelectorAll("#tablaBody_holken tr");
+        rows.forEach(function(row) {
+            var cols = row.querySelectorAll("td");
+            var nombre = cols[2].textContent;
+            var puntos = parseInt(cols[5].textContent);
+            tableData.push({ nombre: nombre, puntos: puntos });
+        });
+
+        var etiquetas = tableData.map(function(item) {
+            return item.nombre;
+        });
+        var valores = tableData.map(function(item) {
+            return item.puntos;
+        });
+
+        var ctx = document.getElementById("graficoPuntos").getContext("2d");
+        var chart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: etiquetas,
+                datasets: [
+                    {
+                        label: "Puntos",
+                        data: valores,
+                        backgroundColor: "rgba(75, 192, 192, 0.2)",
+                        borderColor: "rgba(75, 192, 192, 1)",
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+                
+            </div>
+
+        </div>
+    </div>    
+     
+    <footer style="text-align: center;"!important>
+        
+        <p>Derechos de autor © 2023. Praxthon 2023.</p>
+        <p>Contáctanos by Karlys</p>
+      </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <!--querys -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <!--sata -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"> </script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"> </script>
+    <script src="{% static 'js/index.js' %}"></script>
+
+</body>
+</html>
